@@ -1,0 +1,50 @@
+/* COLOR SCHEME
+    - 243E4F - darkest
+    - 369094 - dark teal
+    - 6ACEBF - teal
+    - e9f2f0 - lightest
+    - E39961 - accent orange
+*/
+
+body {
+    background-color:#e9f2f0;
+    color:#243E4F;
+}
+
+
+#nav {
+    display:flex;justify-content:space-between;background-color:#369094;
+}
+#nav a {
+    color:#e9f2f0;
+}
+
+#nav a:hover {
+    opacity:0.8;
+}
+
+#nav a.dropdown-item {
+    color:#243E4F;
+}
+
+#nav a.dropdown-item:hover {
+    opacity:1;
+}
+
+.holder {
+    width:100%;
+    height:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+#centered {
+    width:500px;
+    padding:20px;
+    margin-top:100px;
+    background-color:rgba(255,255,255,0.5);
+    border-radius:10px;
+    align-self:center;
+    text-align:center;
+}
