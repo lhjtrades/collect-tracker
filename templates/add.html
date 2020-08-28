@@ -15,7 +15,7 @@
 {% endfor %}
 <div id="holder">
     <h2>Add Item</h2>
-    <form action="/add" method="POST">
+    <form action="/add" method="POST" style="text-align:left;">
         <!-- <input type="text" name="artist" placeholder="Artist/Group Name" value="">
         <input type="text" name="album" placeholder="Album" value=""> -->
         <label for="type">Type</label>
@@ -26,18 +26,20 @@
             <!--<option value="completed">received</option>-->
         </select>
         <label for="type">Date Mailed (optional, can update later)</label>
-        <input type="date" name="date" placeholder="" value="">
+        <input type="date" name="date" id="date" placeholder="" value="">
+        <label for="no-date" style="font-size:12.5px;text-transform:none;"><input type="checkbox" name="no-date" id="no-date">Date unknown / not mailed yet</label>
+        
         <label for="type">Who you're trading with or buying from</label>
         <input type="text" name="account" placeholder="Account name" value="">
         <label for="type">Platform you're using</label>
-        <input type="text" name="platform" placeholder="Platform" value="">
+        <input type="text" name="platform" placeholder="ex. Instagram, Twitter, Facebook" value="">
         <label for="type">What you're giving</label>
         <input type="text" name="giving" placeholder="ex. An Ode Joshua, $5" value="">
         <label for="type">What you're getting</label>
-        <input type="text" name="getting" placeholder="What you are getting" value="">
+        <input type="text" name="getting" placeholder="ex. Reveal Juyeon PC" value="">
         
         <label for="type">Notes (optional)</label>
-        <textarea name="notes" placeholder="Notes" value=""></textarea><br/>
+        <textarea name="notes" placeholder="Sending first, will mail on certain date, etc." value=""></textarea>
 
         <label for="type">Status</label>
         <!-- statuses -->
@@ -81,5 +83,17 @@ $(function() {
             $('#' + $(this).val()).show();
         });
     });
+</script>
+<script type="text/javascript">
+$("#no-date").change(function() {
+     var is_checked = $(this).is(":checked");
+     if(is_checked) {
+        prev_val = $("#date").val();
+        $("#date").val("");
+     } else {
+        $("#date").val(prev_val);
+     }
+     $("#date").prop("readonly", is_checked);
+});
 </script>
 {% endblock %}

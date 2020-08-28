@@ -160,3 +160,14 @@ def add():
             
         return render_template('add.html', time = datetime.now())
     return redirect(url_for('index'))
+
+@app.route('/completed')
+def completed():
+    if(session.get('lin') == True):
+        existing_user = users.find_one({'username': session.get('username')})
+        item_list = {
+            'pending':existing_user['pending'],
+            'otw':existing_user['otw']
+        }
+        return render_template('completed.html',time=datetime.now(), item_list=item_list)
+    return redirect(url_for('index'))

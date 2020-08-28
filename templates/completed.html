@@ -1,0 +1,41 @@
+{% extends "loggedin.html" %}
+
+{% block styling %}
+<link rel="stylesheet" type="text/css" href="static/css/index.css?q={{ time }}" />
+{% endblock %}
+
+
+{% block content %}
+    <!-- table -->
+    <div class="table-responsive" style="background-color:white;padding:20px;border-radius:10px;">
+        <h2>Completed</h2><br/>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Type</th>
+                    <th scope="col" style="width:120px;">Date Mailed</th>
+                    <th scope="col">Account</th>
+                    <th scope="col">Platform</th>
+                    <th scope="col">Giving</th>
+                    <th scope="col">Getting</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in item_list.pending %}
+                <tr>
+                    <td>{{item['type']}}</td>
+                    <td>{{item['date']}}</td>
+                    <td>{{item['account']}}</td>
+                    <td>{{item['platform']}}</td>
+                    <td>{{item['giving']}}</td>
+                    <td>{{item['getting']}}</td>
+                    <td>{{item['status']}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+<br/>
+
+{% endblock %}
