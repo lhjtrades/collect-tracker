@@ -1,0 +1,85 @@
+{% extends "loggedin.html" %}
+
+{% block styling %}
+<link rel="stylesheet" type="text/css" href="static/css/forms.css?q={{ time }}" />
+{% endblock %}
+
+{% block content %}
+{% for mesg in get_flashed_messages() %}
+    <div class="alert alert-warning alert-dismissible fade show" style="width:400px;align-self:center;" role="alert">
+  <strong>{{mesg}}</strong>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endfor %}
+<div id="holder">
+    <h2>Add Item</h2>
+    <form action="/add" method="POST">
+        <!-- <input type="text" name="artist" placeholder="Artist/Group Name" value="">
+        <input type="text" name="album" placeholder="Album" value=""> -->
+        <label for="type">Type</label>
+        <select name="type" id="typeselect">
+            <option value="Trade">Trade</option>
+            <option value="Purchase">Purchase</option>
+            <option value="GO">GO</option>
+            <!--<option value="completed">received</option>-->
+        </select>
+        <label for="type">Date Mailed (optional, can update later)</label>
+        <input type="date" name="date" placeholder="" value="">
+        <label for="type">Who you're trading with or buying from</label>
+        <input type="text" name="account" placeholder="Account name" value="">
+        <label for="type">Platform you're using</label>
+        <input type="text" name="platform" placeholder="Platform" value="">
+        <label for="type">What you're giving</label>
+        <input type="text" name="giving" placeholder="ex. An Ode Joshua, $5" value="">
+        <label for="type">What you're getting</label>
+        <input type="text" name="getting" placeholder="What you are getting" value="">
+        
+        <label for="type">Notes (optional)</label>
+        <textarea name="notes" placeholder="Notes" value=""></textarea><br/>
+
+        <label for="type">Status</label>
+        <!-- statuses -->
+        <div id="Trade" class="statuses">
+            <select name="status1" id="status">
+                <option>Select status</option>
+                <option value="Pending">Pending</option>
+                <option value="On the way">On the way</option>
+            </select>
+        </div>
+        <div id="Purchase" class="statuses" style="display:none;">
+            <select name="status2" id="status">
+                <option>Select status</option>
+                <option value="Pending">Pending</option>
+                <option value="Paid">Paid</option>
+                <option value="On the way">On the way</option>
+            </select>
+        </div>
+        <div id="GO" class="statuses" style="display:none;">
+            <select name="status3" id="status">
+                <option>Select status</option>
+                <option value="Waiting to pay">Waiting to pay</option>
+                <option value="Waiting for EMS">Waiting for EMS</option>
+                <option value="Waiting for Domestic">Waiting for Domestic</option>
+                <option value="Waiting for Shipping">Waiting for Shipping</option>
+                <option value="On the way">On the way</option>
+            </select>
+        </div><br/>
+
+        <!-- submit button -->
+        <input type="submit" value="Add">
+    </form>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script>  
+$(function() {
+        $('#typeselect').change(function(){
+            $('.statuses').hide();
+            $('#' + $(this).val()).show();
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block styling %}
+<link rel="stylesheet" type="text/css" href="static/css/forms.css?q={{ time }}" />
+{% endblock %}
+
+{% block content %}
+<div id="holder">
+    <h2>{% block form_title %}{% endblock %}</h2>
+    {% block form_content %}{% endblock %}
+</div>
+{% endblock %}

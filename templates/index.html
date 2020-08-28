@@ -1,12 +1,17 @@
-{% extends "base.html" %}
+{% extends "loggedin.html" %}
+
+{% block styling %}
+<link rel="stylesheet" type="text/css" href="static/css/index.css?q={{ time }}" />
+{% endblock %}
+
 
 {% block content %}
-<div class="container">
-    <div class="row row-cols-1 row-cols-md-3 mt-4">
+    <!-- counters -->
+    <div class="row row-cols-1 row-cols-md-3">
         <div class="col mb-4">
             <div class="card">
                 <div class="card-body">
-                    <h1>2</h1>
+                    <h1>{{num['pending_num']}}</h1>
                     <h5 class="card-title">Pending</h5>
                 </div>
             </div>
@@ -14,7 +19,7 @@
         <div class="col mb-4">
             <div class="card">
                 <div class="card-body">
-                    <h1>5</h1>
+                    <h1>{{num['otw_num']}}</h1>
                     <h5 class="card-title">On The Way</h5>
                 </div>
             </div>
@@ -22,12 +27,54 @@
         <div class="col mb-4">
             <div class="card">
                 <div class="card-body">
-                    <h1>12</h1>
+                    <h1>{{num['completed_num']}}</h1>
                     <h5 class="card-title">Completed</h5>
                 </div>
             </div>
         </div>
     </div>
-</div>
+
+    <!-- table -->
+    <div class="table-responsive" style="background-color:white;padding:20px;border-radius:10px;">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Type</th>
+                    <th scope="col" style="width:120px;">Date Mailed</th>
+                    <th scope="col">Account</th>
+                    <th scope="col">Platform</th>
+                    <th scope="col">Giving</th>
+                    <th scope="col">Getting</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in item_list.pending %}
+                <tr>
+                    <td>{{item['type']}}</td>
+                    <td>{{item['date']}}</td>
+                    <td>{{item['account']}}</td>
+                    <td>{{item['platform']}}</td>
+                    <td>{{item['giving']}}</td>
+                    <td>{{item['getting']}}</td>
+                    <td>{{item['status']}}</td>
+                </tr>
+                {% endfor %}
+                {% for item in item_list.otw %}
+                <tr>
+                    <td>{{item['type']}}</td>
+                    <td>{{item['date']}}</td>
+                    <td>{{item['account']}}</td>
+                    <td>{{item['platform']}}</td>
+                    <td>{{item['giving']}}</td>
+                    <td>{{item['getting']}}</td>
+                    <td>{{item['status']}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+<br/><br/>
+    <u>View Completed</u>
 
 {% endblock %}

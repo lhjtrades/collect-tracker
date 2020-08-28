@@ -1,0 +1,12 @@
+{% extends "forms.html" %}
+
+{% block form_title %}Log in{% endblock %}
+
+{% block form_content %}
+    <form action="/login" method="POST">
+        <input type="text" name="username" placeholder="Username" value=""><br/>
+        <input type="password" name="password" placeholder="Password" value=""><br/>
+        <input type="submit" value="Log in">
+    </form><br/>
+    Don't have an account yet? <a href="/signup">Sign up!</a>
+{% endblock %}

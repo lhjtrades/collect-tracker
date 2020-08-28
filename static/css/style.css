@@ -11,6 +11,14 @@ body {
     color:#243E4F;
 }
 
+a {
+    color:#E39961;
+}
+
+a:hover {
+    color:#369094;
+}
+
 /* NAVIGATION */
 
 #nav {
@@ -32,12 +40,15 @@ body {
     opacity:1;
 }
 
-.card {
-    border-radius:10px;
-    border:none;
-    border-left:5px solid #E39961;
+#content-hold {
+    text-align:center;margin-top:50px;display:flex;justify-content:center;flex-direction:column
 }
 
-.card h5 {
-    line-height:1;
+#holder {
+    padding:20px;background-color:white;border-radius:10px;width:400px;align-self:center;
+    margin-bottom:50px;
+}
+
+.table td {
+    vertical-align:middle;
 }

@@ -20,7 +20,7 @@
 
         <!-- NAVIGATION -->
         <nav class="navbar sticky-top navbar-expand-lg" id="nav">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="/">
                 <img src="/docs/4.5/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
                 Tracker
             </a>
@@ -30,34 +30,18 @@
                 </button>
             </div>
 
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup" style="justify-content:flex-end">
-                <div class="navbar-nav">
-                    <a class="nav-item nav-link" href="/">
-                        Dashboard</span>
-                    </a>
-                    <a class="nav-item nav-link" href="/about">Add</a>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            My Account
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="/settings">Settings</a>
-                            <a class="dropdown-item" href="/help">Help</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="/logout">Log out</a>
-                        </div>
-                    </li>
-
-                </div>
-            </div>
+            {% block navlink %}{% endblock %}
             </nav>
 
-        {% block content %}{% endblock %}
+        <div class="container" id="content-hold">
+            {% block content %}{% endblock %}
+        </div>
         
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+        {% block javascript %}{% endblock %}
     </body>
 </html>
