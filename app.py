@@ -16,10 +16,13 @@ app = Flask(__name__)
 app.config['SECRET'] = os.getenv("SECRET_KEY")
 SECRET = app.config['SECRET']
 
-s3 = os.environ['SECRET']
-# s3 = SECRET
+# top is for heroku deployment
+# s3 = os.environ['SECRET']
+s3 = SECRET
 
-secret_key = secrets.token_hex(16)
+# top is for heroku deployment
+# secret_key = os.environ['SSECRET']
+secret_key = os.getenv("SSECRET")
 app.config['SECRET_KEY'] = secret_key
 
 # name of database
@@ -42,20 +45,25 @@ def index():
         return redirect(url_for('dashboard'))
     return render_template('landing.html', time = datetime.now())
 
-@app.route('/dashboard')
+@app.route('/dashboard', methods=['POST', 'GET'])
 def dashboard():
     if(session.get('lin') == True):
-        existing_user = users.find_one({'username': session.get('username')})
+        if request.method == 'POST':
+            users.update(
+                {'username': session.get('username')},
+                { "$set": { 'items' : []} }
+            )
+        existing_user = users.find_one({'username': session.get('username')})['items']
         num = {
-            'pending_num': len(existing_user['pending']),
-            'otw_num': len(existing_user['otw']),
-            'completed_num': len(existing_user['completed'])
+            'pending_num': users.find({'$and':[{'username':session.get('username'),'items': { '$elemMatch': { 'hidden_status': "pending"} }}]}).count(),
+            'otw_num': users.find({'$and':[{'username':session.get('username'),'items': { '$elemMatch': { 'hidden_status': "otw"} }}]}).count(),
+            'completed_num': users.find({'$and':[{'username':session.get('username'),'items': { '$elemMatch': { 'hidden_status': "completed"} }}]}).count()
         }
-        item_list = {
-            'pending':existing_user['pending'],
-            'otw':existing_user['otw']
-        }
-        return render_template('index.html',time=datetime.now(), num = num, item_list=item_list)
+        # item_list = {
+        #     'pending':list(users.find( {"items": { '$elemMatch': { 'hidden_status': "pending"} }})),
+        #     'otw':list(users.find({'hidden_status':'otw'}))
+        # }
+        return render_template('index.html',time=datetime.now(), num = num, item_list=existing_user)
     return redirect(url_for('index'))
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -73,7 +81,7 @@ def login():
                 session['unique'] = temphold['unique']
                 session['lin'] = True
                 return(redirect(url_for('index')))
-        flash('invalid username or password')
+        flash('Invalid username or password. Please try again.')
         #return render_template('login.html', time = datetime.now())
     return render_template('login.html', time = datetime.now())
 
@@ -93,18 +101,16 @@ def signup():
                 'username': new_user.username,
                 'password': new_user.password,
                 'unique': new_user.unique,
-                'pending':[],
-                'otw':[],
-                'completed':[]
+                'items':[]
             })
             session['username'] = request.form['username'] #TODO: secure sessions
             session['unique'] = holdunique #currently using the unique id for "secure" sessions
-            app.config['SECRET_KEY'] = holdunique
+            # app.config['SECRET_KEY'] = holdunique
             session['lin'] = True
             return redirect(url_for('index'))
         #if it already exists:
-        flash( 'That username already exists! Try logging in.')
-        return render_template('login.html', time = datetime.now())
+        flash( 'That username already exists! Try a different username.')
+        # return render_template('login.html', time = datetime.now())
     return render_template('signup.html', time = datetime.now())
 
 @app.route('/logout')
@@ -122,22 +128,14 @@ def add():
                 flash('Please select a status.')
                 return redirect(url_for('add'))
             user = session.get('username')
-            existing_user = users.find_one({'username': user})
+            # existing_user = users.find_one({'username': user})['items']
             if(request.form['type'].lower() == 'trade'):
                     user_status = request.form['status1']
             elif(request.form['type'].lower() == 'purchase'):
                 user_status = request.form['status2']
             else:
                 user_status = request.form['status3']
-            info = {
-                'type':request.form['type'],
-                'date':request.form['date'],
-                'account':request.form['account'],
-                'platform':request.form['platform'].capitalize(),
-                'giving':request.form['giving'],
-                'getting':request.form['getting'],
-                'status':user_status
-            }
+            
             
             #setting up status to push
             status =""
@@ -145,6 +143,8 @@ def add():
                 status = 'pending'
             elif (request.form['type'].lower() == 'go') and (request.form['status3'].lower() != 'on the way'):
                 status = 'pending'
+            elif(request.form['status1'].lower() == 'on the way') or (request.form['status2'].lower() == 'on the way') or (request.form['status3'].lower() == 'on the way'):
+                status = 'otw'
             else:
                 if(request.form['type'].lower() == 'trade'):
                     status = request.form['status1'].lower()
@@ -152,11 +152,24 @@ def add():
                     status = request.form['status2'].lower()
                 else:
                     status = request.form['status3'].lower()
+            
+            #everything getting added
+            info = {
+                'type':request.form['type'],
+                'date':request.form['date'],
+                'account':request.form['account'],
+                'platform':request.form['platform'].capitalize(),
+                'giving':request.form['giving'],
+                'getting':request.form['getting'],
+                'notes':request.form['notes'],
+                'status':user_status,
+                'hidden_status':status
+            }
 
+            push_key = 'items.' + status
             users.update(
                 { 'username': user },
-                { "$push": { status : info} }, 
-                True
+                { "$push": { 'items' : info} }
             )
             
             return redirect(url_for('index'))
@@ -167,10 +180,19 @@ def add():
 @app.route('/completed')
 def completed():
     if(session.get('lin') == True):
-        existing_user = users.find_one({'username': session.get('username')})
-        item_list = {
-            'pending':existing_user['pending'],
-            'otw':existing_user['otw']
-        }
-        return render_template('completed.html',time=datetime.now(), item_list=item_list)
+        existing_user = users.find_one({'username': session.get('username')})['items']
+        # need to rework
+        # item_list = {
+        #     'pending':existing_user['pending'],
+        #     'otw':existing_user['otw']
+        # }
+        return render_template('completed.html',time=datetime.now(), item_list=existing_user)
+    return redirect(url_for('index'))
+
+@app.route('/item/<number>')
+def item(number):
+    if(session.get('lin') == True):
+        existing_user = users.find_one({'username': session.get('username')})['items']
+        item = existing_user[int(number)-1]
+        return render_template('item.html',time=datetime.now(),item=item)
     return redirect(url_for('index'))

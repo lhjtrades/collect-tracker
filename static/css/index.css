@@ -13,3 +13,21 @@
 .card-body{
     text-align:left;
 }
+
+table {
+    border-radius:10px;
+}
+
+thead {
+    background-color:#369094;
+    color:#e9f2f0;
+}
+
+table td{
+    border-color:#e9f2f0;
+}
+
+
+[data-href] {
+    cursor: pointer;
+}

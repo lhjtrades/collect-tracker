@@ -35,41 +35,38 @@
     </div>
 
     <!-- table -->
+    Edit / 
+    <form action="/dashboard" method="POST">
+        <input type="text" value="clear" style="display:none;">
+        <input type="submit" value="Clear all">
+    </form>
+
     <div class="table-responsive" style="background-color:white;padding:20px;border-radius:10px;">
-        <table class="table table-hover">
+        <table class="table table-hover table-bordered">
             <thead>
                 <tr>
-                    <th scope="col">Type</th>
+                    <th scope="col" style="width:50px;">Type</th>
                     <th scope="col" style="width:120px;">Date Mailed</th>
                     <th scope="col">Account</th>
                     <th scope="col">Platform</th>
-                    <th scope="col">Giving</th>
-                    <th scope="col">Getting</th>
-                    <th scope="col">Status</th>
+                    <th scope="col" style="width:200px;">Giving</th>
+                    <th scope="col" style="width:200px;">Getting</th>
+                    <th scope="col" style="width:120px;">Status</th>
+                    <th scope="col">Notes</th>
                 </tr>
             </thead>
             <tbody>
-                {% for item in item_list.pending %}
-                <tr>
-                    <td>{{item['type']}}</td>
-                    <td>{{item['date']}}</td>
-                    <td>{{item['account']}}</td>
-                    <td>{{item['platform']}}</td>
-                    <td>{{item['giving']}}</td>
-                    <td>{{item['getting']}}</td>
-                    <td>{{item['status']}}</td>
-                </tr>
-                {% endfor %}
-                {% for item in item_list.otw %}
-                <tr>
-                    <td>{{item['type']}}</td>
-                    <td>{{item['date']}}</td>
-                    <td>{{item['account']}}</td>
-                    <td>{{item['platform']}}</td>
-                    <td>{{item['giving']}}</td>
-                    <td>{{item['getting']}}</td>
-                    <td>{{item['status']}}</td>
-                </tr>
+                {% for item in range(item_list|length) %}
+                    <tr class="hello" data-href="{{url_for('item', number = item)}}">
+                        <td>{{item_list[item]['type']}}</td>
+                        <td>{{item_list[item]['date']}}</td>
+                        <td>{{item_list[item]['account']}}</td>
+                        <td>{{item_list[item]['platform']}}</td>
+                        <td>{{item_list[item]['giving']}}</td>
+                        <td>{{item_list[item]['getting']}}</td>
+                        <td>{{item_list[item]['status']}}</td>
+                        <td>{{item_list[item]['notes']}}</td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>
@@ -77,4 +74,14 @@
 <br/><br/>
     <a href="/completed">View Completed</a>
 
+{% endblock %}
+
+{% block javascript %}
+<script>
+$(document).ready(function($) {
+    $('*[data-href]').on('click', function() {
+        window.location = $(this).data("href");
+    });
+});
+</script>
 {% endblock %}
