@@ -19,6 +19,11 @@ a:hover {
     color:#369094;
 }
 
+.alert {
+    border:1px solid #E39961;
+    background-color:#f7be92;
+}
+
 /* NAVIGATION */
 
 #nav {
