@@ -1,5 +1,7 @@
 {% extends "loggedin.html" %}
 
+{% block title %}{{item_name}} - {% endblock %}
+
 {% block styling %}
 <link rel="stylesheet" type="text/css" href="static/css/forms.css?q={{ time }}" />
 {% endblock %}
@@ -14,86 +16,81 @@
 </div>
 {% endfor %}
 <div id="holder">
-    <h2>Add Item</h2>
-    <form action="/dashboard" method="POST" style="text-align:left;">
+    <h2>Edit Item</h2>
+    <form action="/editing" name="add" method="POST" style="text-align:left;">
         <!-- <input type="text" name="artist" placeholder="Artist/Group Name" value="">
         <input type="text" name="album" placeholder="Album" value=""> -->
         <label for="type">Type</label>
         <select name="type" id="typeselect">
-            <option value="Trade">Trade</option>
-            <option value="Purchase">Purchase</option>
-            <option value="GO">GO</option>
+            <option value="Trade" {% if item['type'].lower()=='trade' %}selected{% endif %}>Trade</option>
+            <option value="Purchase" {% if item['type'].lower()=='purchase' %}selected{% endif %}>Purchase</option>
+            <option value="GO" {% if item['type'].lower()=='go' %}selected{% endif %}>GO</option>
             <!--<option value="completed">received</option>-->
         </select>
         <label for="type">Date Mailed (optional, can update later)</label>
-        <input type="date" name="date" id="date" placeholder="" value="">
-        <label for="no-date" style="font-size:12.5px;text-transform:none;"><input type="checkbox" name="no-date" id="no-date">Date unknown / not mailed yet</label>
+        <input type="date" name="date" id="date" placeholder="" value="{{item['date']}}" {% if item['date'] == "" %}readonly{% endif %}> 
+        <label for="no-date" style="font-size:12.5px;text-transform:none;"><input type="checkbox" name="no-date" id="no-date" {% if item['date'] == "" %}checked{% endif %}>Date unknown / not mailed yet</label>
         
         <label for="type">Who you're trading with or buying from</label>
-        <input type="text" name="account" placeholder="Account name" value="">
+        <input type="text" name="account" placeholder="Account name" value="{{item['account']}}">
         <label for="type">Platform you're using</label>
-        <input type="text" name="platform" placeholder="ex. Instagram, Twitter, Facebook" value="">
+        <input type="text" name="platform" placeholder="ex. Instagram, Twitter, Facebook" value="{{item['platform']}}">
         <label for="type">What you're giving</label>
-        <input type="text" name="giving" placeholder="ex. An Ode Joshua, $5" value="">
+        <input type="text" name="giving" placeholder="ex. An Ode Joshua, $5" value="{{item['giving']}}">
         <label for="type">What you're getting</label>
-        <input type="text" name="getting" placeholder="ex. Reveal Juyeon PC" value="">
+        <input type="text" name="getting" placeholder="ex. Reveal Juyeon PC" value="{{item['getting']}}">
         
         <label for="type">Notes (optional)</label>
-        <textarea name="notes" placeholder="Sending first, will mail on certain date, etc." value=""></textarea>
+        <textarea name="notes" placeholder="Sending first, will mail on certain date, etc." value="">{{item['notes']}}</textarea>
 
         <label for="type">Status</label>
         <!-- statuses -->
         <div id="Trade" class="statuses">
             <select name="status1" id="status">
-                <option>Select status</option>
-                <option value="Pending">Pending</option>
-                <option value="On the way">On the way</option>
+                <!-- <option>Select status</option> -->
+                <option value="Pending" {% if item['status']=='Pending' %}selected{% endif %}>Pending</option>
+                <option value="On the way" {% if item['status']=='On the way' %}selected{% endif %}>On the way</option>
             </select>
         </div>
         <div id="Purchase" class="statuses" style="display:none;">
             <select name="status2" id="status">
-                <option>Select status</option>
-                <option value="Pending">Pending</option>
-                <option value="Paid">Paid</option>
-                <option value="On the way">On the way</option>
+                <!-- <option>Select status</option> -->
+                <option value="Pending" {% if item['status']=='Pending' %}selected{% endif %}>Pending</option>
+                <option value="Paid" {% if item['status']=='Paid' %}selected{% endif %}>Paid</option>
+                <option value="On the way" {% if item['status']=='On the way' %}selected{% endif %}>On the way</option>
             </select>
         </div>
         <div id="GO" class="statuses" style="display:none;">
             <select name="status3" id="status">
-                <option>Select status</option>
-                <option value="Waiting to pay">Waiting to pay</option>
-                <option value="Waiting for EMS">Waiting for EMS</option>
-                <option value="Waiting for Domestic">Waiting for Domestic</option>
-                <option value="Waiting for Shipping">Waiting for Shipping</option>
-                <option value="On the way">On the way</option>
+                <!-- <option>Select status</option> -->
+                <option value="Waiting to pay" {% if item['status']=='Waiting to pay' %}selected{% endif %}>Waiting to pay</option>
+                <option value="Waiting for EMS" {% if item['status']=='Waiting for EMS' %}selected{% endif %}>Waiting for EMS</option>
+                <option value="Waiting for Domestic" {% if item['status']=='Waiting for Domestic' %}selected{% endif %}>Waiting for Domestic</option>
+                <option value="Waiting for Shipping" {% if item['status']=='Waiting for Shipping' %}selected{% endif %}>Waiting for Shipping</option>
+                <option value="On the way" {% if item['status']=='On the way' %}selected{% endif %}>On the way</option>
             </select>
         </div><br/>
 
         <!-- submit button -->
-        <input type="submit" value="Add">
+        <input type="hidden" name="id" value="{{num}}">
+        <input type="submit" value="Save changes">
+    </form>
+        
+        <a href="/dashboard">Cancel</a>
+
+    <form action="/completed" method="POST"  onsubmit="return confirm('Are you sure you want to mark this as completed? You will not be able to recover this entry back to your main table.');">
+        <input type="hidden" name="id" value="{{num}}">
+        <input type="submit" value="Mark as complete">
+    </form>
+    <form action="/delete" method="POST"  onsubmit="return confirm('Are you sure you want to delete this entry?');">
+        <input type="hidden" name="id" value="{{num}}">
+        <input type="submit" value="Delete">
     </form>
 </div>
 {% endblock %}
 
 {% block javascript %}
-<script>  
-$(function() {
-        $('#typeselect').change(function(){
-            $('.statuses').hide();
-            $('#' + $(this).val()).show();
-        });
-    });
-</script>
-<script type="text/javascript">
-$("#no-date").change(function() {
-     var is_checked = $(this).is(":checked");
-     if(is_checked) {
-        prev_val = $("#date").val();
-        $("#date").val("");
-     } else {
-        $("#date").val(prev_val);
-     }
-     $("#date").prop("readonly", is_checked);
-});
-</script>
+<script type="text/javascript" src="static/js/valid-add.js"></script>
+<script type="text/javascript" src="static/js/keepselect.js"></script>
+<script type="text/javascript" src="static/js/checkdate.js"></script>
 {% endblock %}

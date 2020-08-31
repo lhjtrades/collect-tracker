@@ -1,3 +1,7 @@
+h2 {
+    line-height:2;
+}
+
 input,select, textarea {
     background-color:#e9f2f0;
     color:#243E4F;
@@ -44,4 +48,16 @@ input[type=checkbox]{
 
 #date {
     margin-bottom:-5px;
+}
+
+form label.error {
+  color: #E39961;
+  display:block;
+  margin-top:-3px;
+  text-transform:none;
+  font-size:10px;
+}
+
+form[name=log] label.error,form[name=signup] label.error {
+    margin-bottom:-10px;
 }

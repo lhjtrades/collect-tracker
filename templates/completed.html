@@ -1,11 +1,17 @@
 {% extends "loggedin.html" %}
 
+{% block title %}Completed - {% endblock %}
+
 {% block styling %}
 <link rel="stylesheet" type="text/css" href="static/css/index.css?q={{ time }}" />
 {% endblock %}
 
 
 {% block content %}
+    <form action="/completed" method="POST" onsubmit="return confirm('Are you sure you want to clear all entries on this page?');">
+        <input type="text" name="id" value="clear" style="display:none;">
+        <input type="submit" value="Clear all">
+    </form>
     <!-- table -->
     <div class="table-responsive" style="background-color:white;padding:20px;border-radius:10px;">
         <h2>Completed</h2><br/>
@@ -23,17 +29,19 @@
                 </tr>
             </thead>
             <tbody>
-                {% for item in range(item_list|length) %}
-                    <tr class="hello" data-href="/item/{{item+1}}">
-                        <td>{{item_list[item]['type']}}</td>
-                        <td>{{item_list[item]['date']}}</td>
-                        <td>{{item_list[item]['account']}}</td>
-                        <td>{{item_list[item]['platform']}}</td>
-                        <td>{{item_list[item]['giving']}}</td>
-                        <td>{{item_list[item]['getting']}}</td>
-                        <td>{{item_list[item]['status']}}</td>
-                        <td>{{item_list[item]['notes']}}</td>
+                {% for item in item_list %}
+                    {% if item['hidden_status']=='completed' %}
+                    <tr class="hello">
+                        <td>{{item['type']}}</td>
+                        <td>{{item['date']}}</td>
+                        <td>{{item['account']}}</td>
+                        <td>{{item['platform']}}</td>
+                        <td>{{item['giving']}}</td>
+                        <td>{{item['getting']}}</td>
+                        <td>{{item['status']}}</td>
+                        <td>{{item['notes']}}</td>
                     </tr>
+                    {% endif %}
                 {% endfor %}
             </tbody>
         </table>

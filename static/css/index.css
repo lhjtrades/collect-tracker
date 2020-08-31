@@ -4,6 +4,48 @@
     border-left:5px solid #E39961;
 }
 
+table.dataTable thead .sorting_asc {
+    background-image: url('../images/sort_asc.png');
+}
+
+table.dataTable thead .sorting_desc {
+    background-image: url('../images/sort_desc.png');
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+      border:0px solid #000;
+      box-shadow:none;
+      margin:0px;
+      padding:0px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover, .dataTables_wrapper .dataTables_paginate .paginate_button:active {
+      background:none;
+      border:0px solid #000;
+      box-shadow:none;
+      margin:0px;
+      padding:0px;
+    }
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+    cursor: default;
+    color: #666 !important;
+    border:none;
+    background: transparent;
+    box-shadow: none;
+}
+
+.page-link:hover{
+    color:#369094;
+}
+
+*:focus {
+    outline: none;
+    border-color: inherit;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
 .card h5 {
     line-height:1;
     text-transform:uppercase;
@@ -12,6 +54,27 @@
 
 .card-body{
     text-align:left;
+}
+
+.dataTables_length {
+    text-align:left;
+}
+
+.dataTables_filter {
+    text-align:right;
+}
+.dataTables_filter label {
+    display:flex;
+    flex-direction:row;
+    justify-content:flex-end;
+}
+.dataTables_filter input {
+    width:200px;
+    margin-left:10px;
+}
+
+.dataTables_length select {
+    width:55px;
 }
 
 table {
@@ -23,11 +86,31 @@ thead {
     color:#e9f2f0;
 }
 
+.table thead th {
+    vertical-align:middle;
+}
+
 table td{
     border-color:#e9f2f0;
 }
 
-
 [data-href] {
     cursor: pointer;
+}
+
+.page-link {
+    color:#369094;
+}
+
+.page-item.active .page-link {
+    background-color:#369094;
+    border-color:#369094;
+}
+
+.table td, .table th {
+    padding:.55rem;
+}
+
+table.dataTable.no-footer {
+    border-bottom: 0px solid #111;
 }

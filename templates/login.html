@@ -1,9 +1,10 @@
 {% extends "forms.html" %}
 
+{% block title %}Log in - {% endblock %}
 {% block form_title %}Log in{% endblock %}
 
 {% block form_content %}
-    <form action="/login" method="POST">
+    <form action="/login" name="log" method="POST">
         <input type="text" name="username" placeholder="Username" value=""><br/>
         <input type="password" name="password" placeholder="Password" value=""><br/>
         <input type="submit" value="Log in">

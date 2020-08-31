@@ -1,4 +1,5 @@
 {% extends "loggedin.html" %}
+{% block title %}Add Item - {% endblock %}
 
 {% block styling %}
 <link rel="stylesheet" type="text/css" href="static/css/forms.css?q={{ time }}" />
@@ -15,33 +16,33 @@
 {% endfor %}
 <div id="holder">
     <h2>Add Item</h2>
-    <form action="/add" method="POST" style="text-align:left;">
+    <form action="/add" name="add" method="POST" style="text-align:left;">
         <!-- <input type="text" name="artist" placeholder="Artist/Group Name" value="">
         <input type="text" name="album" placeholder="Album" value=""> -->
         <label for="type">Type</label>
         <select name="type" id="typeselect">
-            <option value="Trade">Trade</option>
-            <option value="Purchase">Purchase</option>
-            <option value="GO">GO</option>
+            <option value="Trade" {% if form_info['type']=='Trade' %}selected{% endif %}>Trade</option>
+            <option value="Purchase" {% if form_info['type']=='Purchase' %}selected{% endif %}>Purchase</option>
+            <option value="GO" {% if form_info['type']=='GO' %}selected{% endif %}>GO</option>
             <!--<option value="completed">received</option>-->
         </select>
         <label for="type">Date Mailed (optional, can update later)</label>
-        <input type="date" name="date" id="date" placeholder="" value="">
+        <input type="date" name="date" id="date" placeholder="" value="{{form_info['date']}}">
         <label for="no-date" style="font-size:12.5px;text-transform:none;"><input type="checkbox" name="no-date" id="no-date">Date unknown / not mailed yet</label>
         
         <label for="type">Who you're trading with or buying from</label>
-        <input type="text" name="account" placeholder="Account name" value="">
+        <input type="text" name="account" placeholder="Account name" value="{{form_info['account']}}">
         <label for="type">Platform you're using</label>
-        <input type="text" name="platform" placeholder="ex. Instagram, Twitter, Facebook" value="">
+        <input type="text" name="platform" placeholder="ex. Instagram, Twitter, Facebook" value="{{form_info['platform']}}">
         <label for="type">What you're giving</label>
-        <input type="text" name="giving" placeholder="ex. An Ode Joshua, $5" value="">
+        <input type="text" name="giving" placeholder="ex. An Ode Joshua, $5" value="{{form_info['giving']}}">
         <label for="type">What you're getting</label>
-        <input type="text" name="getting" placeholder="ex. Reveal Juyeon PC" value="">
+        <input type="text" name="getting" placeholder="ex. Reveal Juyeon PC" value="{{form_info['getting']}}">
         
         <label for="type">Notes (optional)</label>
-        <textarea name="notes" placeholder="Sending first, will mail on certain date, etc." value=""></textarea>
+        <textarea name="notes" placeholder="Sending first, will mail on certain date, etc." value="">{{form_info['notes']}}</textarea>
 
-        <label for="type">Status</label>
+        <label for="status">Status</label>
         <!-- statuses -->
         <div id="Trade" class="statuses">
             <select name="status1" id="status">
@@ -76,24 +77,7 @@
 {% endblock %}
 
 {% block javascript %}
-<script>  
-$(function() {
-        $('#typeselect').change(function(){
-            $('.statuses').hide();
-            $('#' + $(this).val()).show();
-        });
-    });
-</script>
-<script type="text/javascript">
-$("#no-date").change(function() {
-     var is_checked = $(this).is(":checked");
-     if(is_checked) {
-        prev_val = $("#date").val();
-        $("#date").val("");
-     } else {
-        $("#date").val(prev_val);
-     }
-     $("#date").prop("readonly", is_checked);
-});
-</script>
+<script type="text/javascript" src="static/js/valid-add.js"></script>
+<script type="text/javascript" src="static/js/keepselect.js"></script>
+<script type="text/javascript" src="static/js/checkdate.js"></script>
 {% endblock %}
