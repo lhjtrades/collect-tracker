@@ -1,10 +1,14 @@
 {% extends "forms.html" %}
 
+{% block title %}Sign up - {% endblock %}
 {% block form_title %}Sign up{% endblock %}
+
 {% block form_content %}
-    <form action="/signup" method="POST">
+    <form action="/signup" name="signup" method="POST">
         <input type="text" name="username" placeholder="Username" value=""><br/>
         <input type="password" name="password" placeholder="Password" value=""><br/>
+        <label style="text-transform:none;margin-top:5px;text-align:center;margin-bottom:15px;">Disclaimer: while I do encrypt passwords, I do not recommend using a heavily-used password as I have no other protection/security other than encryption.
+</label>
         <input type="submit" value="Sign up">
     </form><br/>
         Already have an account? <a href="/login">Log in!</a>

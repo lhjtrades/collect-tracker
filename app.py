@@ -6,6 +6,9 @@ from flask import request
 from flask_pymongo import PyMongo
 from datetime import datetime
 from model import User
+from find import find_items, clear_type
+from functions import get_title
+from functions import gen_info
 import os
 
 import bcrypt, uuid, secrets
@@ -17,12 +20,13 @@ app.config['SECRET'] = os.getenv("SECRET_KEY")
 SECRET = app.config['SECRET']
 
 # top is for heroku deployment
-s3 = os.environ['SECRET']
-#s3 = SECRET
+# s3 = os.environ['SECRET']
+s3 = SECRET
 
 # top is for heroku deployment
-secret_key = os.environ['SSECRET']
-#secret_key = os.getenv("SSECRET")
+# secret_key = os.environ['SSECRET']
+secret_key = os.getenv("SSECRET")
+
 app.config['SECRET_KEY'] = secret_key
 
 # name of database
@@ -49,20 +53,16 @@ def index():
 def dashboard():
     if(session.get('lin') == True):
         if request.method == 'POST':
-            users.update(
-                {'username': session.get('username')},
-                { "$set": { 'items' : []} }
-            )
+            clear_type(users, session.get('username'),'pending')
+            clear_type(users, session.get('username'),'otw')
+
         existing_user = users.find_one({'username': session.get('username')})['items']
         num = {
-            'pending_num': users.find({'$and':[{'username':session.get('username'),'items': { '$elemMatch': { 'hidden_status': "pending"} }}]}).count(),
-            'otw_num': users.find({'$and':[{'username':session.get('username'),'items': { '$elemMatch': { 'hidden_status': "otw"} }}]}).count(),
-            'completed_num': users.find({'$and':[{'username':session.get('username'),'items': { '$elemMatch': { 'hidden_status': "completed"} }}]}).count()
+            'pending_num': find_items(existing_user,'pending'),
+            'otw_num': find_items(existing_user,'otw'),
+            'completed_num': find_items(existing_user,'completed')
         }
-        # item_list = {
-        #     'pending':list(users.find( {"items": { '$elemMatch': { 'hidden_status': "pending"} }})),
-        #     'otw':list(users.find({'hidden_status':'otw'}))
-        # }
+
         return render_template('index.html',time=datetime.now(), num = num, item_list=existing_user)
     return redirect(url_for('index'))
 
@@ -122,51 +122,26 @@ def logout():
 def add():
     global users
     if(session.get('lin') == True):
+        form_info = {}
 
         if request.method == 'POST':
-            if (request.form['type'].lower() == 'trade' and request.form['status1'] == "Select status") or (request.form['type'].lower() == 'purchase' and request.form['status2'] == "Select status") or (request.form['type'].lower() == 'go' and request.form['status3'] == "Select status"):
-                flash('Please select a status.')
-                return redirect(url_for('add'))
-            user = session.get('username')
-            # existing_user = users.find_one({'username': user})['items']
-            if(request.form['type'].lower() == 'trade'):
-                    user_status = request.form['status1']
-            elif(request.form['type'].lower() == 'purchase'):
-                user_status = request.form['status2']
-            else:
-                user_status = request.form['status3']
-            
-            
-            #setting up status to push
-            status =""
-            if (request.form['type'].lower() == 'purchase') and (request.form['status2'].lower() == 'paid'):
-                status = 'pending'
-            elif (request.form['type'].lower() == 'go') and (request.form['status3'].lower() != 'on the way'):
-                status = 'pending'
-            elif(request.form['status1'].lower() == 'on the way') or (request.form['status2'].lower() == 'on the way') or (request.form['status3'].lower() == 'on the way'):
-                status = 'otw'
-            else:
-                if(request.form['type'].lower() == 'trade'):
-                    status = request.form['status1'].lower()
-                elif(request.form['type'].lower() == 'purchase'):
-                    status = request.form['status2'].lower()
-                else:
-                    status = request.form['status3'].lower()
-            
-            #everything getting added
-            info = {
-                'type':request.form['type'],
-                'date':request.form['date'],
-                'account':request.form['account'],
-                'platform':request.form['platform'].capitalize(),
-                'giving':request.form['giving'],
-                'getting':request.form['getting'],
-                'notes':request.form['notes'],
-                'status':user_status,
-                'hidden_status':status
-            }
+            user = session.get('username') 
 
-            push_key = 'items.' + status
+            # if(request.form['type'].lower() == 'trade'):
+            #     user_status = request.form['status1']
+            # elif(request.form['type'].lower() == 'purchase'):
+            #     user_status = request.form['status2']
+            # else:
+            #     user_status = request.form['status3']
+            
+            if (request.form['type'].lower() == 'trade' and request.form['status1'] == "Select status") or (request.form['type'].lower() == 'purchase' and request.form['status2'] == "Select status") or (request.form['type'].lower() == 'go' and request.form['status3'] == "Select status"):
+                
+                form_info = gen_info(request.form)
+                flash('Please select a status.')
+                return render_template('add.html', time = datetime.now(), form_info = form_info)
+            
+            info = gen_info(request.form)
+
             users.update(
                 { 'username': user },
                 { "$push": { 'items' : info} }
@@ -174,25 +149,63 @@ def add():
             
             return redirect(url_for('index'))
             
-        return render_template('add.html', time = datetime.now())
+        return render_template('add.html', time = datetime.now(), form_info = form_info)
     return redirect(url_for('index'))
 
-@app.route('/completed')
+@app.route('/completed', methods=['POST', 'GET'])
 def completed():
     if(session.get('lin') == True):
+        if request.method == 'POST':
+            if request.form['id'] == 'clear':
+                clear_type(users, session.get('username'),'completed')
+            else:
+                query = 'items.' + request.form['id'] + '.hidden_status'
+                query_2 = 'items.' + request.form['id'] + '.status'
+                users.update(
+                    {'username':session.get('username')},
+                    {'$set':{query:'completed',query_2:'Completed'}}
+                )
         existing_user = users.find_one({'username': session.get('username')})['items']
-        # need to rework
-        # item_list = {
-        #     'pending':existing_user['pending'],
-        #     'otw':existing_user['otw']
-        # }
         return render_template('completed.html',time=datetime.now(), item_list=existing_user)
     return redirect(url_for('index'))
 
-@app.route('/item/<number>')
+@app.route('/item-<number>')
 def item(number):
     if(session.get('lin') == True):
         existing_user = users.find_one({'username': session.get('username')})['items']
         item = existing_user[int(number)-1]
-        return render_template('item.html',time=datetime.now(),item=item)
+        num=int(number)-1
+        item_name = get_title(item['getting'])
+        return render_template('item.html',time=datetime.now(),item=item, num=num, item_name = item_name)
+    return redirect(url_for('index'))
+
+@app.route('/editing', methods=['POST', 'GET'])
+def editing():
+    if(session.get('lin') == True):
+        if request.method == 'POST':
+            user = session.get('username')
+            
+            # everything getting added
+            info = gen_info(request.form)
+
+            push_key = 'items.' + request.form['id']
+            users.update(
+                { 'username': user },
+                { "$set": { push_key : info} }
+            )
+    return redirect(url_for('index'))
+
+@app.route('/delete', methods=['POST', 'GET'])
+def delete():
+    if(session.get('lin') == True):
+        if request.method == 'POST':
+            push_key = 'items.' + request.form['id'] + '.delete'
+            users.update(
+                {'username': session.get('username')}, 
+                {'$set': {push_key:'delete'}}
+            )
+            users.update(
+                {'username': session.get('username')}, 
+                {'$pull': {'items': {'delete': 'delete'}}}
+            )
     return redirect(url_for('index'))
