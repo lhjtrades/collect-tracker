@@ -39,6 +39,21 @@ table.dataTable thead .sorting_desc {
     color:#369094;
 }
 
+.btn:focus {
+    outline: none;
+    border-color: inherit;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.btn-primary {
+    border-color:#E39961;
+    background-color:#E39961;
+    color:white;
+    margin-right:10px;
+    margin-bottom:-10px;
+}
+
 *:focus {
     outline: none;
     border-color: inherit;
@@ -113,4 +128,9 @@ table td{
 
 table.dataTable.no-footer {
     border-bottom: 0px solid #111;
+}
+
+select[name=myTable_length]{
+    margin-left:5px;
+    margin-right:5px;
 }

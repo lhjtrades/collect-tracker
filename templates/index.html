@@ -36,13 +36,24 @@
         </div>
     </div>
 
-    <!-- table -->
-    <form action="/dashboard" method="POST" onsubmit="return confirm('Are you sure you want to clear all entries on this page?');">
+<div style="display:flex;flex-direction:row;">
+    <p><button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#how-to" aria-expanded="false" aria-controls="collapseExample">
+    How to navigate
+</button></p>
+<form action="/dashboard" method="POST" onsubmit="return confirm('Are you sure you want to clear all entries on this page?');">
         <input type="text" value="clear" style="display:none;">
-        <input type="submit" value="Clear all">
+        <button class="btn btn-primary" type="submit" value="">Clear all</button>
     </form>
+</div>
 
-    <div class="table-responsive" style="background-color:white;padding:20px;border-radius:10px;">
+<div class="collapse" id="how-to" style="margin-top:10px;">
+  <div class="card card-body">
+    Click on an item's row to make changes to the item (edit info, mark as complete, delete). Use the search function to look for any info you desire (ex. "GO", "on the way", a specific member, etc). 
+  </div>
+</div>
+
+    <!-- table -->
+    <div class="table-responsive" style="background-color:white;padding:20px;border-radius:10px;margin-top:20px;">
         <table class="table table-hover tablesorter" id="myTable">
             <thead>
                 <tr>

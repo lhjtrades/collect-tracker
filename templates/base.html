@@ -19,7 +19,7 @@
         
         {% block styling %}{% endblock %}
 
-        <title>{% block title %}{% endblock %}Tracker</title>
+        <title>{% block title %}{% endblock %}Collection Tracker</title>
 
         <!--- fontawesome icons -->
         <script src="https://kit.fontawesome.com/9888e5adf8.js" crossorigin="anonymous"></script>
@@ -30,13 +30,8 @@
         <nav class="navbar sticky-top navbar-expand-lg" id="nav">
             <a class="navbar-brand" href="/">
                 <img src="/docs/4.5/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
-                Tracker
+                Collection Tracker
             </a>
-            <div class="navbar-dark">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation" style="color:white;">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-            </div>
 
             {% block navlink %}{% endblock %}
             </nav>

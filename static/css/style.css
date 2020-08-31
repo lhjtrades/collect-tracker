@@ -6,9 +6,29 @@
     - E39961 - accent orange
 */
 
+@font-face {
+    font-family: SegoeUI;
+    src:
+        local("Segoe UI Light"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/light/latest.woff2) format("woff2"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/light/latest.woff) format("woff"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/light/latest.ttf) format("truetype");
+    font-weight: 100;
+}
+@font-face {
+    font-family: SegoeUI;
+    src:
+        local("Segoe UI"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/normal/latest.woff2) format("woff2"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/normal/latest.woff) format("woff"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/normal/latest.ttf) format("truetype");
+    font-weight: 400;
+}
+
 body {
     background-color:#e9f2f0;
     color:#243E4F;
+    font-family:'Segoe UI';
 }
 
 a {
@@ -28,6 +48,7 @@ a:hover {
 
 #nav {
     display:flex;justify-content:space-between;background-color:#369094;
+    font-family:"Segoe UI Light";
 }
 #nav a {
     color:#e9f2f0;
@@ -56,4 +77,9 @@ a:hover {
 
 .table td {
     vertical-align:middle;
+}
+
+.dataTables_length, .dataTables_filter, .dataTables_info, .dataTables_paginate, .myTable_filter, select[name=myTable_length], select[name=myTable_length] > option, .dropdown-item {
+    font-family:"Segoe UI Light";
+    font-weight:600;
 }
