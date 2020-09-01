@@ -74,8 +74,8 @@ def login():
         if existing_user:
             hashed = existing_user['password']
             if bcrypt.checkpw(request.form['password'].encode("utf-8"), hashed):
-                session['username'] = request.form['username'] #TODO: secure sessions, maybe use unique id for this?
-                temphold =  users.find_one({'username': request.form['username']})
+                session['username'] = request.form['username'].lower() #TODO: secure sessions, maybe use unique id for this?
+                temphold =  users.find_one({'username': request.form['username'].lower()})
                 session['unique'] = temphold['unique']
                 session['lin'] = True
                 return(redirect(url_for('index')))
@@ -101,7 +101,7 @@ def signup():
                 'unique': new_user.unique,
                 'items':[]
             })
-            session['username'] = request.form['username'] #TODO: secure sessions
+            session['username'] = request.form['username'].lower() #TODO: secure sessions
             session['unique'] = holdunique #currently using the unique id for "secure" sessions
             # app.config['SECRET_KEY'] = holdunique
             session['lin'] = True
