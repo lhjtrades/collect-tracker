@@ -207,3 +207,11 @@ def delete():
                 {'$pull': {'items': {'delete': 'delete'}}}
             )
     return redirect(url_for('index'))
+
+@app.route('/settings')
+def settings():
+    return redirect(url_for('index'))
+
+@app.route('/help')
+def help():
+    return redirect(url_for('index'))
