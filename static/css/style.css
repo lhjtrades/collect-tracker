@@ -6,13 +6,10 @@
     - E39961 - accent orange
 */
 
-@import url("https://dl.dropbox.com/s/gn00cwtwq5d0cmd/stylesheet.css");
-
 body {
     background-color:#e9f2f0;
     color:#243E4F;
-    font-family:'Segoe UI';
-    font-weight:normal;
+    font-family: 'Poppins', sans-serif;
 }
 
 a {
@@ -36,7 +33,6 @@ a:hover {
 
 #nav {
     display:flex;justify-content:space-between;background-color:#369094;
-    font-family:"Segoe UI";
     font-weight:300;
 }
 #nav a {
@@ -68,7 +64,6 @@ a:hover {
     vertical-align:middle;
 }
 
-.dataTables_length, .dataTables_filter, .dataTables_info, .dataTables_paginate, .myTable_filter, select[name=myTable_length], select[name=myTable_length] > option, .dropdown-item {
-    font-family:"Segoe UI";
-    font-weight:300;
+.dataTables_length, .dataTables_filter, .dataTables_info, .dataTables_paginate, .myTable_filter, select[name=myTable_length], select[name=myTable_length] > option {
+    font-weight:500;
 }

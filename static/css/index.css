@@ -52,6 +52,7 @@ table.dataTable thead .sorting_desc {
     color:white;
     margin-right:10px;
     margin-bottom:-10px;
+    font-weight:500;
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active {
@@ -109,6 +110,7 @@ thead {
 
 .table thead th {
     vertical-align:middle;
+    font-weight:600;
 }
 
 table td{
