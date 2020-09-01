@@ -70,7 +70,7 @@ def login():
     if (session.get('lin') == True):
         return(redirect(url_for('index')))
     if(request.method == 'POST'):
-        existing_user = users.find_one({'username': request.form['username']}) 
+        existing_user = users.find_one({'username': request.form['username'].lower()}) 
         if existing_user:
             hashed = existing_user['password']
             if bcrypt.checkpw(request.form['password'].encode("utf-8"), hashed):
@@ -88,12 +88,12 @@ def signup():
     global users
     if request.method == 'POST':
         # does the user exist?
-        existing_user = users.find_one({'username': request.form['username']}) 
+        existing_user = users.find_one({'username': request.form['username'].lower()}) 
         # if it doesn't yet:
         if existing_user is None:
             holdunique = uuid.uuid4().hex  #generate unique identifier to misuse
             hashed = bcrypt.hashpw(request.form['password'].encode("utf-8"), bcrypt.gensalt())
-            new_user = User(request.form['username'], hashed, holdunique) #create user
+            new_user = User(request.form['username'].lower(), hashed, holdunique) #create user
             #push user to db
             users.insert({
                 'username': new_user.username,
