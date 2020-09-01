@@ -20,10 +20,10 @@ app.config['SECRET'] = os.getenv("SECRET_KEY")
 SECRET = app.config['SECRET']
 
 # top is for heroku deployment
-s3 = os.environ['SECRET']
-secret_key = os.environ['SSECRET']
-# s3 = SECRET
-# secret_key = os.getenv("SSECRET")
+# s3 = os.environ['SECRET']
+# secret_key = os.environ['SSECRET']
+s3 = SECRET
+secret_key = os.getenv("SSECRET")
 
 app.config['SECRET_KEY'] = secret_key
 

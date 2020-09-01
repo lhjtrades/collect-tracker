@@ -33,7 +33,7 @@
                     {% if item['hidden_status']=='completed' %}
                     <tr class="hello">
                         <td>{{item['type']}}</td>
-                        <td>{{item['date']}}</td>
+                        <td>{{item['date'][5::]}}</td>
                         <td>{{item['account']}}</td>
                         <td>{{item['platform']}}</td>
                         <td>{{item['giving']}}</td>

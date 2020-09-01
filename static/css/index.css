@@ -54,6 +54,11 @@ table.dataTable thead .sorting_desc {
     margin-bottom:-10px;
 }
 
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+    background-color:#369094;
+    color:white;
+}
+
 *:focus {
     outline: none;
     border-color: inherit;
@@ -65,6 +70,7 @@ table.dataTable thead .sorting_desc {
     line-height:1;
     text-transform:uppercase;
     font-size:1em;
+    font-weight:600;
 }
 
 .card-body{

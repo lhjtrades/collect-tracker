@@ -54,17 +54,17 @@
 
     <!-- table -->
     <div class="table-responsive" style="background-color:white;padding:20px;border-radius:10px;margin-top:20px;">
-        <table class="table table-hover tablesorter" id="myTable">
+        <table class="table table-hover table-bordered tablesorter" id="myTable">
             <thead>
                 <tr>
                     <th scope="col" style="width:50px;border-bottom:0px solid #000;">Type</th>
-                    <th scope="col" style="width:120px;border-bottom:0px solid #000;">Date Mailed</th>
+                    <th scope="col" style="width:50px;border-bottom:0px solid #000;">Date Mailed</th>
                     <th scope="col" style="border-bottom:0px solid #000;">Account</th>
                     <th scope="col" style="border-bottom:0px solid #000;">Platform</th>
                     <th scope="col" style="width:200px;border-bottom:0px solid #000;">Giving</th>
                     <th scope="col" style="width:200px;border-bottom:0px solid #000;">Getting</th>
-                    <th scope="col" style="width:120px;border-bottom:0px solid #000;">Status</th>
-                    <th scope="col" style="border-bottom:0px solid #000;">Notes</th>
+                    <th scope="col" style="width:100px;border-bottom:0px solid #000;">Status</th>
+                    <th scope="col" style="width:150px;border-bottom:0px solid #000;">Notes</th>
                 </tr>
             </thead>
             <tbody>
@@ -72,7 +72,7 @@
                     {% if item_list[item]['hidden_status'] !='completed' %}
                     <tr class="hello" data-href="{{url_for('item', number = item+1)}}">
                         <td>{{item_list[item]['type']}}</td>
-                        <td>{{item_list[item]['date']}}</td>
+                        <td>{{item_list[item]['date'][5:7]}}/{{item_list[item]['date'][8::]}}</td>
                         <td>{{item_list[item]['account']}}</td>
                         <td>{{item_list[item]['platform']}}</td>
                         <td>{{item_list[item]['giving']}}</td>
@@ -87,7 +87,7 @@
     </div>
 <br/><br/>
     <a href="/completed">View Completed</a>
-
+<br/><br/>
 {% endblock %}
 
 {% block javascript %}
